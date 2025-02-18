@@ -44,8 +44,8 @@ time.sleep(1)
 
 data_frame = pandas.DataFrame([])
 
-for m in range(2,4):
-    for n in range(1,5):
+for m in range(2,100):
+    for n in range(1,21):
         #목록에서 n번째 물건 클릭
         driver.find_element(By.XPATH, '//*[@id="Tr_{}"]/td[3]/div[4]'.format(n)).click()
         time.sleep(1)
@@ -119,7 +119,7 @@ for m in range(2,4):
         try:
             approval = soup.find("span", string=lambda text: text and "사용승인일" in text)
             approval = approval.text.strip().split(':')
-            approval = approval[1]
+            approval = approval[1].split('-')[0]+'년'
     
         except:
             approval = 'error'
@@ -134,14 +134,22 @@ for m in range(2,4):
             og_price = 'error'
             law_price = 'error'
             percent = 'error'
-    
-        print(f'{(m-2)*20 + n}번째 물건, {title}, {property_type}, {address1}, {address2}, {address3}, {floor}, {approval}, {og_price}, {law_price}, {percent}')
 
-        new_data_frame = pandas.DataFrame([[title, property_type, address1, address2, address3, floor, approval, og_price, law_price, percent]], columns = ['사건 번호', '종류', '도/시', '시/구', '구/동', '층', '사용승인', '감정가', '최저가', '퍼센트'])
+        #근생 여부
+        try:
+            keywords = ["사무소", "사무실", "의원", "한의원", "공인중개사", "소매점", "근생빌라", "현황 주거용", "현황 주택", "현황 도시형생활주택", "현황:다세대주택", "현황:도시형생활주택"]
+            special_type = "근생빌라" if any(keyword in text for keyword in keywords) else ""
+
+        except:
+            special_type = 'error'
+
+        
+        print(f'{(m-2)*20 + n}번째 물건, {title}, {property_type}, {address1}, {address2}, {address3}, {floor}, {approval}, {og_price}, {law_price}, {percent}, {special_type}')
+
+        new_data_frame = pandas.DataFrame([[title, property_type, address1, address2, address3, floor, approval, og_price, law_price, percent, special_type]], columns = ['사건 번호', '종류', '도/시', '시/구', '구/동', '층', '사용승인', '감정가', '최저가', '퍼센트', '근생빌라'])
         
         data_frame = pandas.concat([data_frame, new_data_frame],axis=0)
-        
-        
+                        
         driver.close()
         time.sleep(1)
     

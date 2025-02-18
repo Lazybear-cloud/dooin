@@ -7,7 +7,7 @@ from selenium.webdriver.common.by import By
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service  # Service 모듈 가져오기
+from selenium.webdriver.chrome.service import Service
 
 driver_path = "C:/chromedriver.exe"  # 드라이버 경로
 service = Service(driver_path)  # Service 객체 생성
@@ -162,4 +162,4 @@ for m in range(2,100):
 
 data_frame
 
-data_frame.to_excel('C:\임형태/dooin1210xlsx', index = False)
+data_frame.to_excel('D:\임형태\dooin0220.xlsx', index = False)
